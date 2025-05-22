@@ -12,6 +12,15 @@ export default function HomeLayout() {
         name="camera"
         options={{ headerShown: true, headerTitle: "Camera" }}
       />
+      <Stack.Screen
+        name="support"
+        options={{ headerShown: true, headerTitle: "Support" }}
+      />
+
+      <Stack.Screen
+        name="info"
+        options={{ headerShown: true, headerTitle: "Info" }}
+      />
 
       <Stack.Screen name="(claim)" options={{ headerShown: false }} />
     </Stack>
