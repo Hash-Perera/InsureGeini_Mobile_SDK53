@@ -1,29 +1,28 @@
+import AppLoader from "@/components/apploader";
 import { Claim, Report } from "@/models/claim.model";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  Linking,
-  TextInput,
-  Modal,
-  Button,
   ActivityIndicator,
+  FlatList,
+  Image,
+  Linking,
+  Modal,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import AppLoader from "@/components/apploader";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 
 //! Services
+import { statusColors } from "@/constants/geini-colors";
 import { ClaimService } from "@/services/claim.service";
 import { FeedbackService } from "@/services/feedback.service";
-import MapView, { Marker } from "react-native-maps";
-import React from "react";
-import { statusColors } from "@/constants/geini-colors";
 import { Formik } from "formik";
+import React from "react";
+import MapView, { Marker } from "react-native-maps";
 import * as Yup from "yup";
 
 export default function ClaimDetails() {
@@ -350,7 +349,10 @@ export default function ClaimDetails() {
         animationType="slide"
         transparent={true}
       >
-        <View className="flex-1 justify-center items-center bg-black bg-opacity-50 p-4">
+        <View
+          className="flex-1 justify-center items-center p-4"
+          style={{ backgroundColor: "rgba(100, 100, 100, 0.9)" }}
+        >
           <View className="p-6 bg-white rounded-lg w-11/12 shadow-lg">
             {!feedbackSubmitted ? (
               <Formik

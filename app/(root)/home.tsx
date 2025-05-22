@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StatusBar, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialIcons } from "@expo/vector-icons";
 import { useAuth } from "@/hooks/AuthContext";
+import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { ClaimService } from "@/services/claim.service";
+import React, { useEffect, useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 const tailwindConfig = require("../../tailwind.config");
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home() {
   const { logout } = useAuth();
@@ -33,8 +32,8 @@ export default function Home() {
   const cards = [
     { id: 1, icon: "assignment", label: "Claim", route: "/claim" },
     { id: 2, icon: "history", label: "My Claims", route: "/my-claims" },
-    { id: 3, icon: "support-agent", label: "Support", route: "/claim" },
-    { id: 4, icon: "info-outline", label: "Info", route: "/claim" },
+    { id: 3, icon: "support-agent", label: "Support", route: "/support" },
+    { id: 4, icon: "info-outline", label: "Info", route: "/info" },
   ];
 
   return (
@@ -49,9 +48,9 @@ export default function Home() {
 
       <SafeAreaView className="flex-1">
         {/* Header */}
-        <View className="flex-col w-full p-4 h-96">
+        <View className="flex-col w-full p-4 h-96 relative">
           {/* Header with Logout and Profile Buttons */}
-          <View className="flex-row items-center justify-between mb-4">
+          <View className="flex-row items-center justify-between mb-2 z-10">
             <Text className="p-2 text-4xl font-bold text-white">Welcome!</Text>
             <View className="flex-row">
               <TouchableOpacity onPress={logout} className="p-2">
@@ -63,28 +62,27 @@ export default function Home() {
             </View>
           </View>
 
-          <View className="p-2 mb-4">
+          <View className="ps-2 z-10">
             <Text className="text-2xl font-semibold text-white">
               Hello, {user?.user?.name}
             </Text>
             <Text className="text-lg text-white">
               Insurance ID: {user?.user?.insuranceId}
             </Text>
-
-            {/* <Image
-              source={require("@/assets/images/DashboardAnimation.gif")}
-              className="w-52 h-52 mb-4"
-              resizeMode="contain"
-            /> */}
           </View>
 
-          {/* <View className="hidden p-4 rounded-lg bg-white/20">
-            <Text className="mb-2 text-xl font-semibold text-white">
-              Vehicle Details
-            </Text>
-            <Text className="text-lg text-white">Vehicle No: KM7537</Text>
-            <Text className="text-lg text-white">Vehicle Model: Alto</Text>
-          </View> */}
+          <Image
+            source={require("@/assets/images/accident.png")}
+            style={{
+              width: 370,
+              height: 370,
+              position: "absolute",
+              bottom: -50,
+              right: -10,
+              zIndex: 0,
+            }}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Main Content */}
@@ -112,14 +110,6 @@ export default function Home() {
             ))}
           </View>
         </View>
-
-        {/* Button
-        <TouchableOpacity
-          onPress={ClaimService.getClaims}
-          className="items-center justify-center p-8 bg-blue-500"
-        >
-          <Text className="text-white">Claim Now</Text>
-        </TouchableOpacity> */}
       </SafeAreaView>
     </View>
   );
