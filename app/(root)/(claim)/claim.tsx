@@ -46,6 +46,12 @@ const enum ECameraMode {
   VEHICLE_FRONT = "VEHICLE_FRONT",
 }
 
+type OBD_LOADING_STATUS =
+  | "CONNECTING"
+  | "CONNECTED"
+  | "REQUESTING"
+  | "COMPLETED";
+
 const options = [
   { label: "Front", value: "Front" },
   { label: "Back", value: "Back" },
@@ -173,8 +179,6 @@ export default function Claim() {
         quality: 1,
       });
 
-      console.log(result);
-
       // If images are selected, add them to the current images array
       if (!result.canceled) {
         const newImages = result.assets.map((asset) => asset.uri); // Ensure uri is correctly handled
@@ -191,8 +195,6 @@ export default function Claim() {
         // aspect: [4, 3],
         quality: 1,
       });
-
-      console.log(result);
 
       // If an image is selected, update the form state with that image
       if (!result.canceled) {
@@ -353,6 +355,29 @@ export default function Claim() {
         setIsLoading(false);
       });
   };
+
+  // OBD Sensor loading status state and simulation function
+  const [obdStatus, setObdStatus] = useState<OBD_LOADING_STATUS | null>(null);
+
+  const simulateObdConnection = () => {
+    setObdStatus("CONNECTING");
+    setTimeout(() => {
+      setObdStatus("CONNECTED");
+      setTimeout(() => {
+        setObdStatus("REQUESTING");
+        setTimeout(() => {
+          setObdStatus("COMPLETED");
+          setFormState((prev) => ({
+            ...prev,
+            obdCodes: "P0420, P0301, P0171", // Simulated OBD codes
+          }));
+        }, 1500);
+      }, 1500);
+    }, 1500);
+  };
+
+  console.log("obdStatus : ", obdStatus);
+  console.log("Form State:", formState);
 
   //! ===============================================================================
   //! ===============================================================================
@@ -705,7 +730,7 @@ export default function Claim() {
                   </Text>
 
                   {/* <TouchableOpacity
-                      className="flex-row justify-center items-center p-2 mt-4 bg-blue-100 rounded-md"
+                      className="flex-row items-center justify-center p-2 mt-4 bg-blue-100 rounded-md"
                       onPress={() => handleOpenCamera(ECameraMode.DAMAGE)}
                     >
                       <MaterialIcons
@@ -715,9 +740,9 @@ export default function Claim() {
                       />
                     </TouchableOpacity> */}
 
-                  <View className="flex-row justify-between items-center w-full">
+                  <View className="flex-row items-center justify-between w-full">
                     <TouchableOpacity
-                      className="flex-row flex-1 justify-center items-center p-3 m-1 bg-gray-200 rounded-md"
+                      className="flex-row items-center justify-center flex-1 p-3 m-1 bg-gray-200 rounded-md"
                       onPress={() => handleFileUploaderOpen("damageImages")}
                     >
                       <MaterialIcons
@@ -728,7 +753,7 @@ export default function Claim() {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                      className="flex-row flex-1 justify-center items-center p-3 m-1 bg-blue-100 rounded-md"
+                      className="flex-row items-center justify-center flex-1 p-3 m-1 bg-blue-100 rounded-md"
                       onPress={() => handleOpenCamera(ECameraMode.DAMAGE)}
                     >
                       <MaterialIcons
@@ -742,7 +767,7 @@ export default function Claim() {
                   {formState.damageImages.length > 0 && (
                     <ScrollView
                       horizontal
-                      className="mt-2 w-full h-24 bg-gray-200"
+                      className="w-full h-24 mt-2 bg-gray-200"
                       contentContainerStyle={{
                         alignItems: "center",
                         paddingHorizontal: 10,
@@ -760,13 +785,29 @@ export default function Claim() {
                       ))}
                     </ScrollView>
                   )}
-
-                  <View className="mt-5"></View>
+                  <View className="flex-row items-center justify-between my-4">
+                    <TouchableOpacity
+                      onPress={simulateObdConnection}
+                      disabled={obdStatus === "CONNECTING"}
+                      className="px-4 py-2 bg-blue-500 rounded"
+                    >
+                      <Text className="font-semibold text-white">
+                        Connect to OBD Sensor
+                      </Text>
+                    </TouchableOpacity>
+                    {obdStatus && (
+                      <View className="ml-4">
+                        <Text className="font-semibold text-gray-700">
+                          {obdStatus}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
 
                   <InputField
                     label="OBD Codes"
                     placeholder="Enter Obd Codes"
-                    value={values.obdCodes}
+                    value={formState.obdCodes}
                     onChangeText={(text) => {
                       handleChange("obdCodes")(text);
                       setFormState((prev) => ({
@@ -776,6 +817,11 @@ export default function Claim() {
                     }}
                     error={errors.obdCodes}
                     touched={touched.obdCodes}
+                    disabled={
+                      !formState.obdCodes && obdStatus !== "COMPLETED"
+                        ? true
+                        : false
+                    }
                   />
                 </View>
 
