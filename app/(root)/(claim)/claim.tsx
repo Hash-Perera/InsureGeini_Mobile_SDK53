@@ -1,35 +1,35 @@
+import CameraInput from "@/components/form/CameraInput";
+import InputField from "@/components/form/InputField";
+import CheckboxGroup from "@/components/form/MultipleCheckboxes";
+import PrimaryButton from "@/components/form/PrimaryButton";
+import GoogleMap from "@/components/map";
+import MultiImageCameraComponent from "@/components/multiple-snap-camera";
+import CameraComponent from "@/components/single-snap-camera";
+import VoiceRecorder from "@/components/voice-recorder";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Formik } from "formik";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
+  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Image,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { SafeAreaView } from "react-native-safe-area-context";
-import InputField from "@/components/form/InputField";
-import PrimaryButton from "@/components/form/PrimaryButton";
-import { MaterialIcons } from "@expo/vector-icons";
-import CameraComponent from "@/components/single-snap-camera";
 import Modal from "react-native-modal";
-import GoogleMap from "@/components/map";
-import VoiceRecorder from "@/components/voice-recorder";
-import CheckboxGroup from "@/components/form/MultipleCheckboxes";
-import MultiImageCameraComponent from "@/components/multiple-snap-camera";
-import CameraInput from "@/components/form/CameraInput";
+import { SafeAreaView } from "react-native-safe-area-context";
+import * as Yup from "yup";
 const tailwindConfig = require("../../../tailwind.config");
 //! Services
-import { ClaimService } from "@/services/claim.service";
 import AppLoader from "@/components/apploader";
-import { useRouter } from "expo-router";
 import DropdownField from "@/components/form/Dropdown";
-import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
+import { ClaimService } from "@/services/claim.service";
 import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system";
+import * as ImagePicker from "expo-image-picker";
+import { useRouter } from "expo-router";
 
 const enum ECameraMode {
   NIC_FRONT = "NIC_FRONT",
@@ -361,7 +361,7 @@ export default function Claim() {
 
   const simulateObdConnection = () => {
     setObdStatus("CONNECTING");
-    setTimeout(() => {
+    /* setTimeout(() => {
       setObdStatus("CONNECTED");
       setTimeout(() => {
         setObdStatus("REQUESTING");
@@ -373,7 +373,7 @@ export default function Claim() {
           }));
         }, 1500);
       }, 1500);
-    }, 1500);
+    }, 1500); */
   };
 
   console.log("obdStatus : ", obdStatus);
@@ -817,16 +817,16 @@ export default function Claim() {
                     }}
                     error={errors.obdCodes}
                     touched={touched.obdCodes}
-                    disabled={
-                      !formState.obdCodes && obdStatus !== "COMPLETED"
-                        ? true
-                        : false
-                    }
                   />
-                </View>
 
-                <View className="mt-10 mb-8">
-                  <PrimaryButton onPress={() => handleSubmit()} text="Submit" />
+                  <View className="mt-10 mb-8">
+                    <PrimaryButton
+                      onPress={() => handleSubmit()}
+                      text="Submit"
+                    />
+                  </View>
+
+                  <View className="h-20"></View>
                 </View>
               </View>
             )}

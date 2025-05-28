@@ -16,7 +16,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.hash_1.InsureGeini_Mobile_SDK53"
     },
     "web": {
       "bundler": "metro",
@@ -47,10 +52,25 @@
         {
           "photosPermission": "The app accesses your photos to upload images from your gallery"
         }
+      ],
+
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7b3dea99-f9e8-4583-a1ba-51a68dac562f"
+      }
     }
   }
 }
